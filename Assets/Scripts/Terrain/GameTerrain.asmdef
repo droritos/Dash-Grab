@@ -1,3 +1,16 @@
 {
-	"name": "GameTerrain"
+    "name": "GameTerrain",
+    "rootNamespace": "",
+    "references": [
+        "GUID:758548390e8d3674fa6ffddd6acd3c6d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
