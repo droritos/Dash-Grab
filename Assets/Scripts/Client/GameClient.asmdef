@@ -2,7 +2,8 @@
     "name": "GameClient",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:9de6cbc9e149bde4e8f37d444fd19c22"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

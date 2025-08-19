@@ -21,11 +21,6 @@ namespace Game.Terrain
 
         public World CurrentWorld { get; private set; }
 
-        private void Start()
-        {
-            CreateWorld(out Vector3 spawnPoint);
-        }
-
         public void CreateWorld(out Vector3 spawnPoint)
         {
             CurrentWorld = new World();
@@ -39,7 +34,8 @@ namespace Game.Terrain
                     for (int y = 0; y < height; y++)
                     {
                         Vector3 position = new Vector3(x * _spacing, y * _spacing, z * _spacing);
-                        Instantiate(blockDataBase.DirtBlock, position, Quaternion.identity);
+                        Block blockPrefab = Instantiate(blockDataBase.DirtBlock, position, Quaternion.identity);
+                        CurrentWorld.Blocks.Add(blockPrefab);
                     }
 
                     // Spawn tree on the surface block at (x, z) if random chance hits
@@ -59,6 +55,8 @@ namespace Game.Terrain
 
         public void DestoryWorld()
         {
+            if (CurrentWorld == null || CurrentWorld.Blocks == null) return;
+
             foreach (var block in CurrentWorld.Blocks)
             {
                 Destroy(block.gameObject);
@@ -68,11 +66,13 @@ namespace Game.Terrain
         {
             for (int i = 0; i < 3; i++)
             {
-                Vector3 pos = basePos + Vector3.up * i * _spacing; 
-                Instantiate(blockDataBase.WoodBlock, pos, Quaternion.identity);
+                Vector3 pos = basePos + Vector3.up * i * _spacing;
+                Block woodPrefab = Instantiate(blockDataBase.WoodBlock, pos, Quaternion.identity);
+                CurrentWorld.Blocks.Add(woodPrefab);
             }
 
-            Instantiate(blockDataBase.LeafBlock, basePos + Vector3.up * 3 * _spacing, Quaternion.identity);
+            Block logPrefab = Instantiate(blockDataBase.LeafBlock, basePos + Vector3.up * 3 * _spacing, Quaternion.identity);
+            CurrentWorld.Blocks.Add(logPrefab);
         }
 
 
@@ -86,6 +86,7 @@ namespace Game.Terrain
             CreateWorld(out _); // ignore spawnPoint here
         }
 
+        [ContextMenu("Destory World")]
         public void DestoryInEditor()
         {
             DestoryWorld();
