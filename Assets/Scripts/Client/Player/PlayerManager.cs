@@ -1,4 +1,5 @@
 using UnityEngine;
+using Game.Managers;
 
 namespace Game.Client.Player
 { 
@@ -9,6 +10,7 @@ namespace Game.Client.Player
 
         [field: SerializeField] public PlayerLook PlayerLook { get; private set; }
         [field: SerializeField] public Camera MainCamera { get; private set; }
+        [field: SerializeField] public VisualController VisualController { get; private set; }
 
         private void OnEnable()
         {
@@ -34,6 +36,9 @@ namespace Game.Client.Player
             {
                 MainCamera = Camera.main;
             }
+
+            if(!VisualController)
+                VisualController = GetComponentInChildren<VisualController>();
         }
     }
 }

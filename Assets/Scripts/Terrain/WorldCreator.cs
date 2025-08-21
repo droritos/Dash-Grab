@@ -11,6 +11,9 @@ namespace Game.Terrain
 {
     public class WorldCreator : MonoBehaviour
     {
+        public List<Vector3> ValidSpawnPoints;
+        public World CurrentWorld { get; private set; }
+
         [SerializeField] int width = 10;
         [SerializeField] int depth = 10;
         [SerializeField] int height = 3;
@@ -19,12 +22,11 @@ namespace Game.Terrain
 
         private const float _spacing = 2f;
 
-        public World CurrentWorld { get; private set; }
-
         public void CreateWorld(out Vector3 spawnPoint)
         {
             CurrentWorld = new World();
             CurrentWorld.Blocks = new List<Block>();
+            ValidSpawnPoints = new List<Vector3>();
 
 
             for (int x = 0; x < width; x++)
@@ -38,11 +40,18 @@ namespace Game.Terrain
                         CurrentWorld.Blocks.Add(blockPrefab);
                     }
 
-                    // Spawn tree on the surface block at (x, z) if random chance hits
+                    // Assume the block at (x, height - 1, z) is the top ground block
+                    Vector3 spawnCandidate = new Vector3(x * _spacing, (height - 1) * _spacing, z * _spacing);
+
+                    // Only add it to valid list if no tree will be created here
                     if (Random.value < 0.1f)
                     {
                         Vector3 basePos = new Vector3(x * _spacing, height * _spacing, z * _spacing);
                         CreateSimpleTree(basePos);
+                    }
+                    else
+                    {
+                        ValidSpawnPoints.Add(spawnCandidate + Vector3.up * _spacing); // spawn 2 units above the surface
                     }
                 }
             }
@@ -59,7 +68,10 @@ namespace Game.Terrain
 
             foreach (var block in CurrentWorld.Blocks)
             {
-                Destroy(block.gameObject);
+                if (block)
+                {
+                    Destroy(block.gameObject);
+                }
             }
         }
         private void CreateSimpleTree(Vector3 basePos)

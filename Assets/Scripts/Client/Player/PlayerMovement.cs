@@ -1,21 +1,32 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Game.Client.Player
 {
     public class PlayerMovement : PlayerScript
     {
+        public bool IsDashing {  get; private set; } = false;
+
+        [Header("Components")]
         [SerializeField] CharacterController characterController;
+
+        [Header("Movement Settings")]
         [SerializeField] float moveSpeed = 5f;
-        [SerializeField] float dashSpeed = 20f;
-        [SerializeField] float dashDuration = 0.2f;
         [SerializeField] float gravity = -9.81f;
 
+        [Header("Dash Settings")]
+        [SerializeField] float dashSpeed = 20f;
+        [SerializeField] float dashDuration = 0.2f;
+        [SerializeField] float dashCooldown = 0.2f;
+
+        #region Private Fields
 
         private PlayerInput _input;
-        private bool isDashing = false;
-        private float dashTimer;
+        private float _dashTimer;
         private Vector3 verticalVelocity;
+        private bool _canDash = true;
 
+        #endregion
         void OnEnable()
         {
             _input = playerManager.PlayerInput;
@@ -25,16 +36,24 @@ namespace Game.Client.Player
         {
             HandleMovement();
         }
+        public void StartDash()
+        {
+            if(!_canDash) return;
 
+            IsDashing = true;
+            _dashTimer = dashDuration;
+
+            StartCoroutine(DashCooldown());
+        }
         private void HandleMovement()
         {
-            if (isDashing)
+            if (IsDashing)
             {
                 characterController.Move(transform.forward * dashSpeed * Time.deltaTime);
-                dashTimer -= Time.deltaTime;
+                _dashTimer -= Time.deltaTime;
 
-                if (dashTimer <= 0)
-                    isDashing = false;
+                if (_dashTimer <= 0)
+                    IsDashing = false;
 
                 return;
             }
@@ -55,14 +74,14 @@ namespace Game.Client.Player
             // Combine movement and gravity
             Vector3 totalMove = (move * moveSpeed) + verticalVelocity;
             characterController.Move(totalMove * Time.deltaTime);
-        }
 
-        public void StartDash()
+            playerManager.VisualController.HandleMovement(moveInput.magnitude);
+        }
+        private IEnumerator DashCooldown()
         {
-            isDashing = true;
-            dashTimer = dashDuration;
+            _canDash = false;
+            yield return new WaitForSeconds(this.dashCooldown);
+            _canDash = true;
         }
-
-        public bool IsDashing => isDashing;
     }
 }
