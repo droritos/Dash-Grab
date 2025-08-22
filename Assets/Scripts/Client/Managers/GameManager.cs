@@ -54,7 +54,7 @@ namespace Game.Managers
             WorldCreator.CreateWorld(out Vector3 spawnPoint);
             PlayerSpawnPoint = spawnPoint;
 
-            PickUpManager.StartManager();
+            //PickUpManager.StartManager();
         }
         private void EndGame()
         {

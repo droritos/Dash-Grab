@@ -1,45 +1,97 @@
 using UnityEngine;
-using Game.Managers;
 
 namespace Game.Client.Enemy
 {
     public class Enemy : MonoBehaviour
     {
-        [field: SerializeField] public float WorthValue; 
+        [Header("Enemy Info")]
+        [field: SerializeField] public int WorthValue;
 
+        [Header("Visuals")]
         [SerializeField] Transform visualParent;
         [SerializeField] VisualController visualController;
 
+        [Header("Components")]
         [SerializeField] CharacterController characterController;
+
+        [Header("Movement Settings")]
+        [SerializeField, Range(0f, 20f)] float speed = 5f;
+
+        [Header("Gravity Settings")]
+        [SerializeField, Range(-50f, 0f)] float gravity = -9.81f;
+        [SerializeField, Range(0f, 1f)] float groundCheckDistance = 0.1f;
+        [SerializeField] LayerMask groundMask;
 
         private Transform _playerTarget;
 
-        [SerializeField] float speed = 5f;
+        private float verticalVelocity;
+        private bool isGrounded;
 
         private void Update()
         {
             GoTo();
         }
-        public void SetVisualPrefab(GameObject enemyObject)
+
+        public void SetVisualPrefab()
         {
-            Instantiate(enemyObject, visualParent);
+            int childCount = visualParent.childCount;
+
+            if (childCount == 0)
+            {
+                Debug.LogWarning("No children found under visualParent.");
+                return;
+            }
+
+            // Deactivate all children
+            for (int i = 0; i < childCount; i++)
+            {
+                visualParent.GetChild(i).gameObject.SetActive(false);
+            }
+
+            // Activate one at random
+            int randomIndex = Random.Range(0, childCount);
+            visualParent.GetChild(randomIndex).gameObject.SetActive(true);
+            visualController.SetAnimator(visualParent.GetChild(randomIndex).GetComponent<Animator>());
         }
 
         public void SetTarget(Transform player)
         {
             _playerTarget = player;
+            SetVisualPrefab();
         }
 
         private void GoTo()
         {
             if (_playerTarget == null) return;
 
-            Vector3 direction = (_playerTarget.position - transform.position).normalized;
-            Vector3 velocity = direction * speed * Time.deltaTime;
+            // Ground check
+            isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
 
-            characterController.Move(velocity);
+            if (isGrounded && verticalVelocity < 0)
+            {
+                verticalVelocity = -2f;
+            }
+            else
+            {
+                verticalVelocity += gravity * Time.deltaTime;
+            }
 
-            visualController.HandleMovement(velocity.magnitude);
+            Vector3 direction = (_playerTarget.position - transform.position);
+            direction.y = 0f; // Prevent rotation on the vertical axis
+            Vector3 horizontalDirection = direction.normalized;
+
+            if (horizontalDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(horizontalDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+            }
+
+            Vector3 horizontalVelocity = horizontalDirection * speed;
+            Vector3 finalVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z) * Time.deltaTime;
+
+            characterController.Move(finalVelocity);
+
+            visualController.HandleMovement(new Vector3(finalVelocity.x, 0, finalVelocity.z).magnitude);
         }
     }
 }

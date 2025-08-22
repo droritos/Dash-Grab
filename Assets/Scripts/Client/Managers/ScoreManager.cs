@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Game.Data;
+using Game.Client.Enemy;
 
 namespace Game.Managers
 {
@@ -15,14 +16,22 @@ namespace Game.Managers
         private void Start()
         {
             UpdateText(0);
-            EventObserver.OnPickUpCollected += UpdateScore;
+            EventObserver.OnPickUpCollected += AddScore;
+            EventObserver.OnEnemyHit += SubstractScore;
         }
 
-        private void UpdateScore(PickUpBlock valuePickUpToAdd)
+        private void AddScore(PickUpBlock valuePickUpToAdd)
         {
             _score += valuePickUpToAdd.WorthValue;
             UpdateText(_score);
         }
+
+        private void SubstractScore(Enemy valueEnemy)
+        {
+            _score -= valueEnemy.WorthValue;
+            UpdateText(_score);
+        }
+
 
         private void UpdateText(int newValue)
         {

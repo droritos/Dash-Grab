@@ -10,4 +10,9 @@ public class VisualController : MonoBehaviour
     {
         animator.SetFloat(SpeedHash, movementMagnitude);
     }
+
+    public void SetAnimator(Animator animator)
+    {
+        this.animator = animator;
+    }
 }

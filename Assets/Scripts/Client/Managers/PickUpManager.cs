@@ -24,7 +24,7 @@ namespace Game.Managers
 
         private World _currentWorld;
 
-        public void StartManager()
+        public void Start()
         {
             _currentWorld = GameManager.Instance.WorldCreator.CurrentWorld;
 
@@ -60,9 +60,9 @@ namespace Game.Managers
         {
             return Random.Range(0f, 1f) switch
             {
-                var chance when chance < _goldChance => Instantiate(GoldPickUp),
-                var chance when chance < _silverChance => Instantiate(SilverPickUp),
-                _ => Instantiate(CopperPickUp)
+                var chance when chance < _goldChance => Instantiate(GoldPickUp, this.transform),
+                var chance when chance < _silverChance => Instantiate(SilverPickUp,this.transform),
+                _ => Instantiate(CopperPickUp,this.transform)
             };
         }
     }

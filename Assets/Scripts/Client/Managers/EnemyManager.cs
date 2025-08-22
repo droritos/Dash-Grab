@@ -8,11 +8,20 @@ namespace Game.Managers
 
     public class EnemyManager : MonoBehaviour
     {
-        [SerializeField] List<GameObject> enemyVisuals;
         [SerializeField] Enemy enemyPrefab;
-        private World _currentWorld;
-
         [SerializeField] int maxEnemies = 100;
+
+        public void Start()
+        {
+            for (int i = 0; i < maxEnemies; i++)
+            {
+                Vector3 randomPosition = GameManager.Instance.GetRandomSpawnPosition();
+                Enemy enemy = CreateEnemy();
+                enemy.transform.position = randomPosition;
+            }
+
+            EventObserver.OnEnemyHit += OnEnemyCollide;
+        }
 
         private void OnEnemyCollide(Enemy enemy)
         {
@@ -23,14 +32,8 @@ namespace Game.Managers
         {
             Enemy enemy = Instantiate(enemyPrefab,this.transform);
             enemy.SetTarget(GameManager.Instance.PlayerManager.transform);
+
             return enemy;
         }
-
-        private void SetEnemyVisual(Enemy enemy)
-        {
-            //GameObject visual = Instantiate(Random.Range(enemyVisuals[0], enemyVisuals[enemyVisuals.Count]));
-        }
-
-
     }
 }
