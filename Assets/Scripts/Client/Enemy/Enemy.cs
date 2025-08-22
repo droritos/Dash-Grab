@@ -77,7 +77,7 @@ namespace Game.Client.Enemy
             }
 
             Vector3 direction = (_playerTarget.position - transform.position);
-            direction.y = 0f; // Prevent rotation on the vertical axis
+            direction.y = 0f;
             Vector3 horizontalDirection = direction.normalized;
 
             if (horizontalDirection != Vector3.zero)
@@ -87,11 +87,12 @@ namespace Game.Client.Enemy
             }
 
             Vector3 horizontalVelocity = horizontalDirection * speed;
-            Vector3 finalVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z) * Time.deltaTime;
+            Vector3 finalVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z);
 
-            characterController.Move(finalVelocity);
+            characterController.Move(finalVelocity * Time.deltaTime);
 
-            visualController.HandleMovement(new Vector3(finalVelocity.x, 0, finalVelocity.z).magnitude);
+            // Correct magnitude — for animation only use horizontal velocity
+            visualController.HandleMovement(new Vector3(horizontalVelocity.x, 0, horizontalVelocity.z).magnitude);
         }
     }
 }
