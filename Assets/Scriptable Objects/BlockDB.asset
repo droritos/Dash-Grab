@@ -15,3 +15,16 @@ MonoBehaviour:
   DirtBlock: {fileID: 411233082427447951, guid: ec93b068726e7f14582dbaaef6e2318d, type: 3}
   LeafBlock: {fileID: 4566076927408547736, guid: deaaf48a1bee76345ae857800bdcac54, type: 3}
   WoodBlock: {fileID: 496136022397195331, guid: 3b44ee507d6970c458c6a47c6760844a, type: 3}
+  CrateBlock: {fileID: 5022568884002866842, guid: 5f77962a46b3dbc498431a560de4d9a8, type: 3}
+  DarkStoneBlock: {fileID: 4024296258810667479, guid: ffac09ba564a23045b2e32b281c4e8be, type: 3}
+  GlassBlock: {fileID: 2256686102234091288, guid: 33c27c147dd36704682d458025afca79, type: 3}
+  GravelBlock: {fileID: 1308461113866414039, guid: 46e8e05c976edec45a0140ba7ddb3759, type: 3}
+  GrayBrickBlock: {fileID: 8734708241811958483, guid: c76e08e6f5d8ed94780002db4f0ab0c2, type: 3}
+  HayBlock: {fileID: 1876857724454332147, guid: 90d74df397bf09b4380f53544c42b854, type: 3}
+  MetalBlock: {fileID: 1613035121927678813, guid: 3693c57fff5d313448a1ca0720d358f3, type: 3}
+  MetalFrameBlock: {fileID: 3874803419678331834, guid: 405eeff07fcfb1b4ab60a8dc54d37160, type: 3}
+  RedBrickBlock: {fileID: 1583165337061624690, guid: b6b1d1b613bfeb14b9750dd3cecf970b, type: 3}
+  SandBlock: {fileID: 6727248797653348116, guid: 83d7048cb6e8b27499468b9917ca7c0f, type: 3}
+  SmoothStoneBlock: {fileID: 1752326135280403042, guid: 481ffad6f04311f45be2f9462d3fcd53, type: 3}
+  SnowBlock: {fileID: 5302342208066282837, guid: 203c76dabc19b914989bef5ee5759675, type: 3}
+  StoneBlock: {fileID: 4866092470238511904, guid: fa0b3c568bc766e49b717f270ebe538b, type: 3}
